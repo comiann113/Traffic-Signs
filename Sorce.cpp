@@ -10,7 +10,7 @@ void find_green_img();
 
 int main() {
 
-	VideoCapture cap("road_video.mp4");
+	VideoCapture cap("img/road_video.mp4");
 
 	if (!cap.isOpened()) {
 		cerr << "Video open faild!" << endl;
@@ -40,7 +40,7 @@ void find_green_img() {
 	Mat kernel2 = getStructuringElement(MORPH_ELLIPSE, Size(9, 9));
 
 	Mat src;
-	src = imread("D:/University/Junior/snd_semester/Open_CV/team_project/team_project/road_sign03.jpg", IMREAD_COLOR);
+	src = imread("D:/University/Junior/snd_semester/Open_CV/team_project/img/road_sign03.jpg", IMREAD_COLOR);
 
 	if (src.empty()) {
 		cerr << "Image load failed!" << endl;
@@ -48,7 +48,7 @@ void find_green_img() {
 	}
 
 	Mat dst;
-	resize(src, dst, Size(800, 800));//»çÁø (800,800)À¸·Î Å©±â º¯È¯
+	resize(src, dst, Size(800, 800));//ì‚¬ì§„ (800,800)ìœ¼ë¡œ í¬ê¸° ë³€í™˜
 	Mat gray_src;
 	cvtColor(dst, gray_src, COLOR_BGR2GRAY);
 
@@ -58,27 +58,27 @@ void find_green_img() {
 
 	Mat green_mask, green_img;
 
-	//±×¸²ÆÇ ½ºÆ÷ÀÌµå¸¦ ÀÌ¿ëÇÏ¿© ´ë·«ÀûÀÎ ³ì»ö Ç¥ÁöÆÇ h°ª Ã£À½ (70~90)
-	Scalar lower_green = Scalar(75, 120, 80); //(h,s,v)->(»ö»ó, Ã¤µµ, ¼±¸íµµ)
+	//ê·¸ë¦¼íŒ ìŠ¤í¬ì´ë“œë¥¼ ì´ìš©í•˜ì—¬ ëŒ€ëµì ì¸ ë…¹ìƒ‰ í‘œì§€íŒ hê°’ ì°¾ìŒ (70~90)
+	Scalar lower_green = Scalar(75, 120, 80); //(h,s,v)->(ìƒ‰ìƒ, ì±„ë„, ì„ ëª…ë„)
 	Scalar upper_green = Scalar(90, 255, 150);
 
-	//ÃÊ·Ï»ö ¿µ¿ª °ËÃâ
+	//ì´ˆë¡ìƒ‰ ì˜ì—­ ê²€ì¶œ
 	inRange(img_hsv, lower_green, upper_green, green_mask);
 
-	//¿øº»ÀÌ¹ÌÁö¿¡ À§¿¡¼­ ±¸ÇÑ ÃÊ·Ï»ö ¸¶½ºÅ© ÇÕ¼º
+	//ì›ë³¸ì´ë¯¸ì§€ì— ìœ„ì—ì„œ êµ¬í•œ ì´ˆë¡ìƒ‰ ë§ˆìŠ¤í¬ í•©ì„±
 	bitwise_and(dst, dst, green_img, green_mask);
 
 	Mat img_canny;
-	Canny(green_img, img_canny, 100, 150);//canny ¿¬»êÀ¸·Î ¿¡Áö °ËÃâ
+	Canny(green_img, img_canny, 100, 150);//canny ì—°ì‚°ìœ¼ë¡œ ì—ì§€ ê²€ì¶œ
 
 	Mat morpho;
-	morphologyEx(img_canny, morpho, MORPH_CLOSE, kernel2);//¸ğÆú·ÎÁö ´İÈû
+	morphologyEx(img_canny, morpho, MORPH_CLOSE, kernel2);//ëª¨í´ë¡œì§€ ë‹«í˜
 
-	vector<vector<Point>> contours;//¿Ü°û¼± ÀúÀåÇÒ º¯¼ö
-	vector<Vec4i>hierarchy;//¿Ü°û¼±ÀÇ °èÃş Á¤º¸ ´ã´Â º¯¼ö
-	findContours(morpho, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);//¿Ü°û¼± °ËÃâ
+	vector<vector<Point>> contours;//ì™¸ê³½ì„  ì €ì¥í•  ë³€ìˆ˜
+	vector<Vec4i>hierarchy;//ì™¸ê³½ì„ ì˜ ê³„ì¸µ ì •ë³´ ë‹´ëŠ” ë³€ìˆ˜
+	findContours(morpho, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);//ì™¸ê³½ì„  ê²€ì¶œ
 
-	//»¡°£»öÀ¸·Î ¿Ü°û¼± Ãâ·Â
+	//ë¹¨ê°„ìƒ‰ìœ¼ë¡œ ì™¸ê³½ì„  ì¶œë ¥
 	Mat dst2;
 	dst.copyTo(dst2);
 	drawContours(dst2, contours, -1, Scalar(0, 0, 255), 2);
@@ -91,7 +91,7 @@ void find_green_img() {
 
 		int vtc = (int)approx.size();
 
-		//²ÀÁöÁ¡ °³¼ö°¡ 4°³ÀÌ°Å³ª 6°³ÀÎ °æ¿ì ¹Ù¿îµù ¹Ú½º¸¦ ±×¸²
+		//ê¼­ì§€ì  ê°œìˆ˜ê°€ 4ê°œì´ê±°ë‚˜ 6ê°œì¸ ê²½ìš° ë°”ìš´ë”© ë°•ìŠ¤ë¥¼ ê·¸ë¦¼
 		if (vtc == 4 || vtc == 6) {
 			Rect rc = boundingRect(pts);
 			rectangle(dst, rc, Scalar(0, 0, 255), 2);
@@ -106,7 +106,7 @@ void find_blue() {
 	Mat kernel2 = getStructuringElement(MORPH_ELLIPSE, Size(9, 9));
 
 	Mat src;
-	src = imread("D:/University/Junior/snd_semester/Open_CV/team_project/team_project/road_sign02.jpg", IMREAD_COLOR);
+	src = imread("D:/University/Junior/snd_semester/Open_CV/team_project/img/road_sign02.jpg", IMREAD_COLOR);
 
 	if (src.empty()) {
 		cerr << "Image load failed!" << endl;
@@ -114,7 +114,7 @@ void find_blue() {
 	}
 
 	Mat dst;
-	resize(src, dst, Size(800, 800));//»çÁø (800,800)À¸·Î Å©±â º¯È¯
+	resize(src, dst, Size(800, 800));//ì‚¬ì§„ (800,800)ìœ¼ë¡œ í¬ê¸° ë³€í™˜
 	Mat gray_src;
 	cvtColor(dst, gray_src, COLOR_BGR2GRAY);
 
@@ -124,34 +124,34 @@ void find_blue() {
 
 	Mat blue_mask, blue_img;
 
-	//±×¸²ÆÇ ½ºÆ÷ÀÌµå¸¦ ÀÌ¿ëÇÏ¿© ´ë·«ÀûÀÎ Ã»»ö Ç¥ÁöÆÇ h°ª Ã£À½ (70~90)
-	Scalar lower_blue = Scalar(105, 165, 95); //(h,s,v)->(»ö»ó, Ã¤µµ, ¼±¸íµµ)
+	//ê·¸ë¦¼íŒ ìŠ¤í¬ì´ë“œë¥¼ ì´ìš©í•˜ì—¬ ëŒ€ëµì ì¸ ì²­ìƒ‰ í‘œì§€íŒ hê°’ ì°¾ìŒ (70~90)
+	Scalar lower_blue = Scalar(105, 165, 95); //(h,s,v)->(ìƒ‰ìƒ, ì±„ë„, ì„ ëª…ë„)
 	Scalar upper_blue = Scalar(125, 255, 250);
 
-	//Ã»»ö ¿µ¿ª °ËÃâ
+	//ì²­ìƒ‰ ì˜ì—­ ê²€ì¶œ
 	inRange(img_hsv, lower_blue, upper_blue, blue_mask);
 	//morphologyEx(blue_mask, blue_mask, MORPH_OPEN, kernel1);
 	//morphologyEx(blue_mask, blue_mask, MORPH_CLOSE, kernel1);
 
-	//¿øº»ÀÌ¹ÌÁö¿¡ À§¿¡¼­ ±¸ÇÑ Ã»»ö ¸¶½ºÅ© ÇÕ¼º
+	//ì›ë³¸ì´ë¯¸ì§€ì— ìœ„ì—ì„œ êµ¬í•œ ì²­ìƒ‰ ë§ˆìŠ¤í¬ í•©ì„±
 	bitwise_and(dst, dst, blue_img, blue_mask);
 
 	imshow("blue_mask", blue_mask);
 	imshow("blue_img", blue_img);
 
 	Mat img_canny;
-	Canny(blue_img, img_canny, 100, 150);//canny ¿¬»êÀ¸·Î ¿¡Áö °ËÃâ
+	Canny(blue_img, img_canny, 100, 150);//canny ì—°ì‚°ìœ¼ë¡œ ì—ì§€ ê²€ì¶œ
 	imshow("canny", img_canny);
 
 	Mat morpho;
-	morphologyEx(img_canny, morpho, MORPH_CLOSE, kernel2);//¸ğÆú·ÎÁö ´İÈû
+	morphologyEx(img_canny, morpho, MORPH_CLOSE, kernel2);//ëª¨í´ë¡œì§€ ë‹«í˜
 	imshow("morpho", morpho);
 
-	vector<vector<Point>> contours;//¿Ü°û¼± ÀúÀåÇÒ º¯¼ö
-	vector<Vec4i>hierarchy;//¿Ü°û¼±ÀÇ °èÃş Á¤º¸ ´ã´Â º¯¼ö
-	findContours(morpho, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);//¿Ü°û¼± °ËÃâ
+	vector<vector<Point>> contours;//ì™¸ê³½ì„  ì €ì¥í•  ë³€ìˆ˜
+	vector<Vec4i>hierarchy;//ì™¸ê³½ì„ ì˜ ê³„ì¸µ ì •ë³´ ë‹´ëŠ” ë³€ìˆ˜
+	findContours(morpho, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);//ì™¸ê³½ì„  ê²€ì¶œ
 
-	//»¡°£»öÀ¸·Î ¿Ü°û¼± Ãâ·Â
+	//ë¹¨ê°„ìƒ‰ìœ¼ë¡œ ì™¸ê³½ì„  ì¶œë ¥
 	Mat dst2;
 	dst.copyTo(dst2);
 	drawContours(dst2, contours, -1, Scalar(0, 0, 255), 2);
@@ -165,7 +165,7 @@ void find_blue() {
 
 		int vtc = (int)approx.size();
 
-		//²ÀÁöÁ¡ °³¼ö°¡ 4°³ÀÌ°Å³ª 6°³ÀÎ °æ¿ì ¹Ù¿îµù ¹Ú½º¸¦ ±×¸²
+		//ê¼­ì§€ì  ê°œìˆ˜ê°€ 4ê°œì´ê±°ë‚˜ 6ê°œì¸ ê²½ìš° ë°”ìš´ë”© ë°•ìŠ¤ë¥¼ ê·¸ë¦¼
 		if (vtc == 4 || vtc == 6) {
 			Rect rc = boundingRect(pts);
 			rectangle(dst, rc, Scalar(0, 0, 255), 2);
@@ -185,7 +185,7 @@ Mat find_green_video(Mat frame) {
 	Mat kernel2 = getStructuringElement(MORPH_ELLIPSE, Size(9, 9));
 
 	Mat dst;
-	resize(frame, dst, Size(800, 800));//»çÁø (800,800)À¸·Î Å©±â º¯È¯
+	resize(frame, dst, Size(800, 800));//ì‚¬ì§„ (800,800)ìœ¼ë¡œ í¬ê¸° ë³€í™˜
 	Mat gray_src;
 	cvtColor(dst, gray_src, COLOR_BGR2GRAY);
 
@@ -195,35 +195,35 @@ Mat find_green_video(Mat frame) {
 
 	Mat green_mask, green_img;
 
-	//±×¸²ÆÇ ½ºÆ÷ÀÌµå¸¦ ÀÌ¿ëÇÏ¿© ´ë·«ÀûÀÎ ³ì»ö Ç¥ÁöÆÇ h°ª Ã£À½ (70~90)
-	Scalar lower_green = Scalar(75, 120, 50); //(h,s,v)->(»ö»ó, Ã¤µµ, ¼±¸íµµ)
+	//ê·¸ë¦¼íŒ ìŠ¤í¬ì´ë“œë¥¼ ì´ìš©í•˜ì—¬ ëŒ€ëµì ì¸ ë…¹ìƒ‰ í‘œì§€íŒ hê°’ ì°¾ìŒ (70~90)
+	Scalar lower_green = Scalar(75, 120, 50); //(h,s,v)->(ìƒ‰ìƒ, ì±„ë„, ì„ ëª…ë„)
 	Scalar upper_green = Scalar(95, 255, 150);
 
-	//ÃÊ·Ï»ö ¿µ¿ª °ËÃâ
+	//ì´ˆë¡ìƒ‰ ì˜ì—­ ê²€ì¶œ
 	inRange(img_hsv, lower_green, upper_green, green_mask);
 	//morphologyEx(green_mask, green_mask, MORPH_OPEN, kernel1);
 	morphologyEx(green_mask, green_mask, MORPH_CLOSE, kernel2);
 
-	//¿øº»ÀÌ¹ÌÁö¿¡ À§¿¡¼­ ±¸ÇÑ ÃÊ·Ï»ö ¸¶½ºÅ© ÇÕ¼º
+	//ì›ë³¸ì´ë¯¸ì§€ì— ìœ„ì—ì„œ êµ¬í•œ ì´ˆë¡ìƒ‰ ë§ˆìŠ¤í¬ í•©ì„±
 	bitwise_and(dst, dst, green_img, green_mask);
 
 	imshow("green_mask", green_mask);
 	imshow("green_img", green_img);
 
 	Mat img_canny;
-	Canny(green_img, img_canny, 100, 150);//canny ¿¬»êÀ¸·Î ¿¡Áö °ËÃâ
+	Canny(green_img, img_canny, 100, 150);//canny ì—°ì‚°ìœ¼ë¡œ ì—ì§€ ê²€ì¶œ
 	//imshow("canny", img_canny);
 
 	Mat morpho;
-	morphologyEx(img_canny, morpho, MORPH_CLOSE, kernel2);//¸ğÆú·ÎÁö ´İÈû
+	morphologyEx(img_canny, morpho, MORPH_CLOSE, kernel2);//ëª¨í´ë¡œì§€ ë‹«í˜
 	//imshow("morpho", morpho);
 
-	vector<vector<Point>> contours;//¿Ü°û¼± ÀúÀåÇÒ º¯¼ö
-	vector<Vec4i>hierarchy;//¿Ü°û¼±ÀÇ °èÃş Á¤º¸ ´ã´Â º¯¼ö
+	vector<vector<Point>> contours;//ì™¸ê³½ì„  ì €ì¥í•  ë³€ìˆ˜
+	vector<Vec4i>hierarchy;//ì™¸ê³½ì„ ì˜ ê³„ì¸µ ì •ë³´ ë‹´ëŠ” ë³€ìˆ˜
 
-	findContours(morpho, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);//¿Ü°û¼± °ËÃâ
+	findContours(morpho, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);//ì™¸ê³½ì„  ê²€ì¶œ
 
-	//»¡°£»öÀ¸·Î ¿Ü°û¼± Ãâ·Â
+	//ë¹¨ê°„ìƒ‰ìœ¼ë¡œ ì™¸ê³½ì„  ì¶œë ¥
 	Mat dst2;
 	dst.copyTo(dst2);
 	drawContours(dst2, contours, -1, Scalar(0, 0, 255), 2);
@@ -240,7 +240,7 @@ Mat find_green_video(Mat frame) {
 
 		int vtc = (int)approx.size();
 
-		//²ÀÁöÁ¡ °³¼ö°¡ 4°³ÀÌ°Å³ª 6°³ÀÎ °æ¿ì ¹Ù¿îµù ¹Ú½º¸¦ ±×¸²
+		//ê¼­ì§€ì  ê°œìˆ˜ê°€ 4ê°œì´ê±°ë‚˜ 6ê°œì¸ ê²½ìš° ë°”ìš´ë”© ë°•ìŠ¤ë¥¼ ê·¸ë¦¼
 		if (vtc == 4 || vtc == 6) {
 			boundbox[num] = boundingRect(pts);
 
