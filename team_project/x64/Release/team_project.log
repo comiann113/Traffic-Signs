@@ -1,5 +1,0 @@
-﻿  소스.cpp
-D:\University\Junior\snd_semester\Open_CV\team_project\team_project\소스.cpp(308,14): warning C4244: '인수': 'double'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\University\Junior\snd_semester\Open_CV\team_project\team_project\소스.cpp(312,19): warning C4244: '인수': 'double'에서 'const unsigned __int64'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  LINK : /LTCG를 지정했지만 코드를 생성할 필요가 없습니다. 명령줄에서 /LTCG를 제거하면 링커 성능이 향상됩니다.
-  team_project.vcxproj -> D:\University\Junior\snd_semester\Open_CV\team_project\x64\Release\team_project.exe
